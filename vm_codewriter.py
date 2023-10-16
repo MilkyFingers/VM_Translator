@@ -9,7 +9,7 @@ class CodeWriter:
         except:
             print("Could not open a file stream for output file!")
         # here 'None' value will be replaced with the computation
-        self.file = outputfile.strip('.vm')
+        self.file = outputfile.strip('.asm')
 
     def writeArithmetic(self, cmd):
         exit_point = str(uuid.uuid1())
