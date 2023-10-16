@@ -2,8 +2,10 @@
 Translates jack bytecode to hack assembly
 
 To use the application on a Unix-like system;
-1) Copy the vm.zip into some directory and run the following commands:
+1) Copy the files into some directory and run the following commands (at the root of the dir):
 
+   zip vmt.zip *
+   
    echo '#!/usr/bin/python3' | cat - vm.zip > vmt
    
    chmod +x vmt
