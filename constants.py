@@ -9,7 +9,7 @@ arithmetic_translations = {"add": "@SP\nM=M-1\nA=M\nD=M\nA=A-1\nM=D+M\n",
                           "neg" : "@SP\nA=M-1\nM=-M\n",
                           "eq"  : "@return\nD=A\n@R13\nM=D\n@SP\nM=M-1\nA=M\nD=M\nA=A-1\nD=M-D\n@False\nD;JNE\n@True\n0;JMP\n(return)\n",
                           "gt"  : "@return\nD=A\n@R13\nM=D\n@SP\nM=M-1\nA=M\nD=M\nA=A-1\nD=M-D\n@False\nD;JLE\n@True\n0;JMP\n(return)\n",
-                          "lt"  : "@return\nD=A\n@R13\nM=D\n@SP\nM=M-1\nA=M\nD=M\nA=A-1\nD=M-D\n@False\nD;JGT\n@True\n0;JMP\n(return)\n", 
+                          "lt"  : "@return\nD=A\n@R13\nM=D\n@SP\nM=M-1\nA=M\nD=M\nA=A-1\nD=M-D\n@False\nD;JGE\n@True\n0;JMP\n(return)\n", 
                           "and" : "@SP\nM=M-1\nA=M\nD=M\nA=A-1\nM=D&M\n",
                           "or"  : "@SP\nM=M-1\nA=M\nD=M\nA=A-1\nM=D|M\n",
                           "not" : "@SP\nA=M-1\nM=!M\n"}
