@@ -16,6 +16,10 @@ if __name__ == "__main__":
             c.writeArithmetic(p.arg1())
         elif p.commandType() == CommandType.C_POP or p.commandType() == CommandType.C_PUSH:
             c.writePushPop(p.commandType(), p.arg1(), p.arg2())
+        elif p.commandType() == CommandType.C_LABEL:
+            c.writeLabel(p.arg1())
+        elif p.commandType() == CommandType.C_GOTO or p.commandType() == CommandType.C_IF:
+            c.writeGoto(p.commandType(), p.arg1())
     c.writeEndLoop()
     c.writeBoolSubRoutine()
     p.clean()

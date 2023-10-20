@@ -51,6 +51,12 @@ class Parser:
                 return CommandType.C_POP
         elif c_type in ARITHMETIC_OPERATIONS:
             return CommandType.C_ARITHMETIC
+        elif c_type == 'label':
+            return CommandType.C_LABEL
+        elif c_type == 'goto':
+            return CommandType.C_GOTO
+        elif c_type == 'if-goto':
+            return CommandType.C_IF
     
     # This method will return the type of arithmetic operation in the case of add/sub etc commands. Push/Pop commands will return the memory
     # segment they operate on as arg1
@@ -85,7 +91,11 @@ class Parser:
         # here we remove the '\n' from arithmetic operations
         if len(fields) == 1:
             fields[0] = fields[0].strip("\n")
+        # for parsing labels, if-goto and goto commands 
+        elif len(fields) == 2:
+            fields[1] = fields[1].strip("\n")
         return fields
+        
     
     def clean(self):
         self.input_file.close()
