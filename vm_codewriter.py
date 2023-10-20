@@ -11,6 +11,8 @@ class CodeWriter:
         # here 'None' value will be replaced with the computation
         self.file = outputfile.strip('.asm')
 
+    # The conditional operations have a return address as they all jump to a shared True/False subroutine at the end of the program.
+    # This is to simplify having multiple unique (true)/(false) and instead use one label for (return)
     def writeArithmetic(self, cmd):
         exit_point = str(uuid.uuid1())
         self.output.write(arithmetic_translations[cmd].replace("return", exit_point))

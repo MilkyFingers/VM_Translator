@@ -3,7 +3,9 @@ This file contains all of the constants to be used by the parser and codewriter
 """
 import enum
 
-# a data structure to store the values of C_ARITHMERIC commands
+# A data structure to store the values of C_ARITHMERIC commands
+# The conditional commands work by saving the value of a return addres in R13 that is used to return to the code after
+# jumping to the True/False subroutines insterted at the end of the program by the codewriter. 
 arithmetic_translations = {"add": "@SP\nM=M-1\nA=M\nD=M\nA=A-1\nM=D+M\n",
                           "sub" : "@SP\nM=M-1\nA=M\nD=M\nA=A-1\nM=M-D\n",
                           "neg" : "@SP\nA=M-1\nM=-M\n",
