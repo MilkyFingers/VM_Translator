@@ -1,5 +1,14 @@
 from constants import *
 
+"""
+The Parser class works by opening a file stream to the 'filepath', determining the EOF of the file and repeatedly reading the next
+line as long as the EOF has not been reached. Comment lines in the source file as well as empty lines are ommited. The current line is read into
+the self.current_command variable. 
+
+The command is parsed before any methods to fetch the command type/arguments are called. After parsing the command will be broken into the fields:
+CommandType, arg1, agr2 where arg2 may be a none value.
+"""
+
 class Parser:
     
     def __init__(self, filepath):
@@ -31,7 +40,8 @@ class Parser:
             else:
                 self.current_command = None
                 break
-
+    
+    # This method will return an enum type defined in constants.py that corresponds to the type of VM command (i.e add sub push pop)
     def commandType(self):
         c_type = self._parse_fields()[0]
         if c_type in STACK_OPERATIONS:
@@ -42,6 +52,8 @@ class Parser:
         elif c_type in ARITHMETIC_OPERATIONS:
             return CommandType.C_ARITHMETIC
     
+    # This method will return the type of arithmetic operation in the case of add/sub etc commands. Push/Pop commands will return the memory
+    # segment they operate on as arg1
     def arg1(self):
         cmd = self._parse_fields()
         cmd_type = self.commandType()
@@ -51,7 +63,9 @@ class Parser:
             return cmd[0]
         else:
             return cmd[1]
-        
+    
+    # arg2 will be a none value for any arithmetic commands but will return an int for push/pop commands that corresponds to the location
+    # in the memory segment ot operated on as defined by arg1
     def arg2(self):
         cmd = self._parse_fields()
         cmd_type = self.commandType()
@@ -60,6 +74,7 @@ class Parser:
         else:
             return cmd[2]
 
+    # Private method to be used by other class methods. This will split commands into the fields: [CommandType, arg1, arg2]
     def _parse_fields(self):
         if self.current_command != None:
             fields = self.current_command.split(" ")
