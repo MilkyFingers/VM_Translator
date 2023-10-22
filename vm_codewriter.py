@@ -79,10 +79,10 @@ class CodeWriter:
             self.output.write("0;JMP\n")
         # For if-goto commands, we need to first check the top stack value and only jump if it is -1 (true)
         else:
-            # first retrive the top stack value and store it in the D register
-            self.output.write("@SP\nA=M-1\nD=M\n")
+            # first retrive the top stack value and store it in the D register and decrement the stack pointer
+            self.output.write("@SP\nM=M-1\nA=M\nD=M\n")
             # next we address the jump location that is the label stored in arg1 and jump if D is less than 0 
-            self.output.write("@" + arg1 + "\nD;JLT\n")
+            self.output.write("@" + arg1 + "\nD;JNE\n")
 
     def writeComment(self, comment):
         self.output.write(comment)
