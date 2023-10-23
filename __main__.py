@@ -20,6 +20,10 @@ if __name__ == "__main__":
             c.writeLabel(p.arg1())
         elif p.commandType() == CommandType.C_GOTO or p.commandType() == CommandType.C_IF:
             c.writeGoto(p.commandType(), p.arg1())
+        elif p.commandType() == CommandType.C_FUNCTION:
+            c.writeFunction(p.arg1(), p.arg2())
+        elif p.commandType() == CommandType.C_RETURN:
+            c.writeReturn()
     c.writeEndLoop()
     c.writeBoolSubRoutine()
     p.clean()

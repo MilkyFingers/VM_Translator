@@ -57,9 +57,14 @@ class Parser:
             return CommandType.C_GOTO
         elif c_type == 'if-goto':
             return CommandType.C_IF
+        elif c_type == 'function':
+            return CommandType.C_FUNCTION
+        elif c_type == 'return':
+            return CommandType.C_RETURN
     
     # This method will return the type of arithmetic operation in the case of add/sub etc commands. Push/Pop commands will return the memory
     # segment they operate on as arg1
+    # For functions, arg1 will return the name of the function
     def arg1(self):
         cmd = self._parse_fields()
         cmd_type = self.commandType()
@@ -71,7 +76,8 @@ class Parser:
             return cmd[1]
     
     # arg2 will be a none value for any arithmetic commands but will return an int for push/pop commands that corresponds to the location
-    # in the memory segment ot operated on as defined by arg1
+    # in the memory segment operated on as defined by arg1
+    # For functions, arg2 will return the number of local vars to be pushed to the working stack
     def arg2(self):
         cmd = self._parse_fields()
         cmd_type = self.commandType()

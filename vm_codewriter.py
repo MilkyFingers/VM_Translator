@@ -84,6 +84,35 @@ class CodeWriter:
             # next we address the jump location that is the label stored in arg1 and jump if D is less than 0 
             self.output.write("@" + arg1 + "\nD;JNE\n")
 
+    def writeFunction(self, arg1, arg2):
+        # step 1 is to inject a label into the program signalling the start of the function
+        ins = "(" + arg1 + ")\n"
+        # next we have to add local args (the number of these is arg2) onto the stack and increment the stack pointer. i is LCL offset
+        for i in range(int(arg2)):
+            ins += "@SP\nM=M+1\n@"+str(i)+"\nD=A\n@LCL\nA=M\nA=D+A\nM=0\n"
+        self.output.write(ins)
+
+    def writeReturn(self):
+        # First we must save the value of the return address which is stored at LCL - 5. We will save this value in R14
+        ins = "@5\nD=A\n@LCL\nA=M\nA=A-D\nD=M\n@R14\nM=D\n"
+        # Next, the top value of the stack should be saved as this is the return value of the callee
+        ins += "@SP\nA=M-1\nD=M\n"
+        # Next, we want to copy this value into the callees ARG[0]
+        ins += "@ARG\nA=M\nM=D\n"
+        # Next, we want to set the value of SP to ARG + 1
+        ins += "@ARG\nA=M\nD=A+1\n@SP\nM=D\n"
+        # Finally, we must restore the callers values of THAT, THIS, ARG and LCL which are stored at LCL-1, LCL-2, LCL-3 and LCL-4 respectively
+        # Restore THAT
+        ins += "@LCL\nA=M\nA=A-1\nD=M\n@THAT\nM=D\n"
+        # Restore THIS
+        ins += "@2\nD=A\n@LCL\nA=M\nA=A-D\nD=M\n@THIS\nM=D\n"
+        # Restore ARG
+        ins += "@3\nD=A\n@LCL\nA=M\nA=A-D\nD=M\n@ARG\nM=D\n"
+        # Restore LCL
+        ins+= "@4\nD=A\n@LCL\nA=M\nA=A-D\nD=M\n@LCL\nM=D\n"
+        self.output.write(ins)
+
+
     def writeComment(self, comment):
         self.output.write(comment)
 
