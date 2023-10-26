@@ -61,7 +61,9 @@ class Parser:
             return CommandType.C_FUNCTION
         elif c_type == 'return':
             return CommandType.C_RETURN
-    
+        elif c_type == 'call':
+            return CommandType.C_CALL
+         
     # This method will return the type of arithmetic operation in the case of add/sub etc commands. Push/Pop commands will return the memory
     # segment they operate on as arg1
     # For functions, arg1 will return the name of the function
@@ -93,6 +95,7 @@ class Parser:
         # in the event there is a in-line comment we remove it
         if len(fields) >= 3:
             fields = fields[:3]
+            fields[2]= fields[2].strip("/")
             fields[2] = fields[2].strip("\n")
         # here we remove the '\n' from arithmetic operations
         if len(fields) == 1:
@@ -101,7 +104,6 @@ class Parser:
         elif len(fields) == 2:
             fields[1] = fields[1].strip("\n")
         return fields
-        
     
     def clean(self):
         self.input_file.close()

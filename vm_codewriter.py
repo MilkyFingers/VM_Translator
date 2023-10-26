@@ -3,13 +3,18 @@ import uuid
 
 class CodeWriter:
     
-    def __init__(self, outputfile):
+    def __init__(self, outputfile, directory=None):
         try:
             self.output = open(outputfile, "w")
         except:
             print("Could not open a file stream for output file!")
         # here 'None' value will be replaced with the computation
         self.file = outputfile.strip('.asm')
+        # The first thing we do is write the bootstap code if the directory argument is a 1
+        if directory != None:
+            ins = "@256\nD=A\n@SP\nM=D\n"
+            self.output.write(ins)
+            self.writeCall("Sys.init", "0")
 
     # The conditional operations have a return address as they all jump to a shared True/False subroutine at the end of the program.
     # This is to simplify having multiple unique (true)/(false) and instead use one label for (return)
@@ -110,6 +115,27 @@ class CodeWriter:
         ins += "@3\nD=A\n@LCL\nA=M\nA=A-D\nD=M\n@ARG\nM=D\n"
         # Restore LCL
         ins+= "@4\nD=A\n@LCL\nA=M\nA=A-D\nD=M\n@LCL\nM=D\n"
+        # Finally, we jump to the return address that we stored in R14
+        ins += "@R14\nA=M\n0;JMP\n"
+        self.output.write(ins)
+
+    def writeCall(self, function_name, nArgs):
+        # The first thing to do is to create a label that will be used as the return address once the function call is completed and increment SP
+        retAdd = str(uuid.uuid1())
+        ins = "@" + retAdd + "\nD=A\n@SP\nM=M+1\nA=M-1\nM=D\n"
+        # Next, we must save the callers values for LCL, ARG, THIS and THAT and increment the SP by 4
+        ins += "@LCL\nD=M\n@SP\nM=M+1\nA=M-1\nM=D\n"
+        ins += "@ARG\nD=M\n@SP\nM=M+1\nA=M-1\nM=D\n"
+        ins += "@THIS\nD=M\n@SP\nM=M+1\nA=M-1\nM=D\n"
+        ins += "@THAT\nD=M\n@SP\nM=M+1\nA=M-1\nM=D\n"
+        # Next, we have to reposition the values of ARG and LCL for the callee
+        # Arg is located at @retAdd - nArgs
+        ins += "@5\nD=A\n@" + nArgs + "\nD=D+A\n@SP\nD=M-D\n@ARG\nM=D\n"
+        # LCL is set to the value of the SP
+        ins += "@SP\nD=M\n@LCL\nM=D\n"
+        # Lastly, we jump to the function
+        ins += "@" + function_name + "\n0;JMP\n"
+        ins += "(" + retAdd + ")\n"
         self.output.write(ins)
 
 
