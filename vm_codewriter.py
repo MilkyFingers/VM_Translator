@@ -143,7 +143,7 @@ class CodeWriter:
         self.output.write(comment)
 
     def writeBoolSubRoutine(self):
-        self.output.write("(False)\n@SP\nA=M-1\nM=0\n@R13\nA=M\n0;JMP\n(True)\n@SP\nA=M-1\nM=-1\n@R13\nA=M\n0;JMP")
+        self.output.write("(False)\n@SP\nA=M-1\nM=0\n@R13\nA=M\n0;JMP\n(True)\n@SP\nA=M-1\nM=-1\n@R13\nA=M\n0;JMP\n")
 
     def writeEndLoop(self):
         self.output.write("(LOOP)\n@LOOP\n0;JMP\n")
