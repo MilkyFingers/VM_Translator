@@ -6,7 +6,7 @@ To use the application on a Unix-like system;
 
    zip vmt.zip *
    
-   echo '#!/usr/bin/python3' | cat - vm.zip > vmt
+   echo '#!/usr/bin/python3' | cat - vmt.zip > vmt
    
    chmod +x vmt
 
